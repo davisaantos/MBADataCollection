@@ -1,4 +1,4 @@
-# MBADataColletion
+# MBADataCollection
 
 # Manual do Projeto de Coleta de Dados e Armazenamento com Kafka em Ubuntu
 
