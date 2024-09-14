@@ -4,6 +4,10 @@
 
 Este manual fornece instruções detalhadas para configurar e executar um projeto de coleta e armazenamento de dados que utiliza o Apache Kafka como ferramenta de streaming em uma máquina virtual (VM) rodando Ubuntu. O projeto permite a coleta de diversos tipos de dados, incluindo eventos, PDFs, imagens, vídeos e documentos do Office, e armazena-os localmente.
 
+Criadores: Aline Couto, Carolina Atilli, Davi Santos e Fábio Emanuel.
+
+
+
 ## Sumário
 
 1. [Pré-requisitos](#pré-requisitos)
@@ -17,13 +21,17 @@ Este manual fornece instruções detalhadas para configurar e executar um projet
 4. [Execução do Kafka](#execução-do-kafka)
    - [Iniciando o ZooKeeper](#iniciando-o-zookeeper)
    - [Iniciando o Servidor Kafka](#iniciando-o-servidor-kafka)
-5. [Execução do Produtor e Consumidor](#execução-do-produtor-e-consumidor)
+5. [Criação de Tópico e Mensagens no Kafka](#criação-de-tópico-e-mensagens-no-kafka)
+   - [Criar um Tópico](#criar-um-tópico)
+   - [Enviar uma Mensagem](#enviar-uma-mensagem)
+   - [Consumir uma Mensagem](#consumir-uma-mensagem)
+6. [Execução do Produtor e Consumidor](#execução-do-produtor-e-consumidor)
    - [Produtor de Dados](#produtor-de-dados)
    - [Consumidor de Dados](#consumidor-de-dados)
-6. [Armazenamento Local](#armazenamento-local)
-7. [Testes e Validação](#testes-e-validação)
-8. [Contribuições](#contribuições)
-9. [Licença](#licença)
+7. [Armazenamento Local](#armazenamento-local)
+8. [Testes e Validação](#testes-e-validação)
+9. [Contribuições](#contribuições)
+10. [Licença](#licença)
 
 ---
 
@@ -66,19 +74,19 @@ O Apache Kafka requer Java instalado no sistema.
 1. **Baixe a última versão do Kafka**:
 
    ```bash
-   wget https://downloads.apache.org/kafka/3.5.1/kafka_2.13-3.5.1.tgz
+   wget https://downloads.apache.org/kafka/3.5.1/kafka_2.13-3.8.0.tgz
    ```
 
 2. **Extraia o arquivo baixado**:
 
    ```bash
-   tar -xzf kafka_2.13-3.5.1.tgz
+   tar -xzf kafka_2.13-3.8.0.tgz
    ```
 
 3. **Mova o diretório extraído para `/usr/local/kafka`**:
 
    ```bash
-   sudo mv kafka_2.13-3.5.1 /usr/local/kafka
+   sudo mv kafka_2.13-3.8.0 /usr/local/kafka
    ```
 
 ## Configuração do Projeto
@@ -128,6 +136,40 @@ Antes de iniciar o produtor e o consumidor, é necessário iniciar o ZooKeeper e
    cd /usr/local/kafka
    bin/kafka-server-start.sh config/server.properties
    ```
+
+## Criação de Tópico e Mensagens no Kafka
+
+### Criar um Tópico
+
+Com o Kafka rodando, crie um tópico chamado `test-topic`:
+
+```bash
+bin/kafka-topics.sh --create --topic test-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+
+### Enviar uma Mensagem
+
+Envie uma mensagem para o tópico `test-topic`:
+
+```bash
+bin/kafka-console-producer.sh --topic test-topic --bootstrap-server localhost:9092
+```
+
+Depois de executar este comando, você pode digitar uma mensagem e pressionar Enter para enviá-la. Por exemplo:
+
+```text
+Hello, Kafka!
+```
+
+### Consumir uma Mensagem
+
+Consuma mensagens do tópico `test-topic`:
+
+```bash
+bin/kafka-console-consumer.sh --topic test-topic --from-beginning --bootstrap-server localhost:9092
+```
+
+Esse comando vai exibir as mensagens do tópico a partir do início.
 
 ## Execução do Produtor e Consumidor
 
